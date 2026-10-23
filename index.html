@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#5b55d9">
+<meta name="description" content="A playful learning app for mental maths, English, logic and public speaking.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Brain Power Coach</title>
+<style>
+:root{--purple:#5b55d9;--ink:#242447;--muted:#696987;--paper:#f7f7ff;--card:#fff;--mint:#dff8ec;--yellow:#fff0b8;--pink:#ffe3ee;--blue:#e3f1ff;--line:#e8e7f7;--shadow:0 8px 25px #3c35700d}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,sans-serif;line-height:1.45}
+button,input,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation}
+.app{max-width:760px;margin:0 auto;min-height:100dvh;padding:0 16px 34px}
+header{padding:calc(16px + env(safe-area-inset-top)) 2px 12px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{display:flex;gap:10px;align-items:center}.logo{width:46px;height:46px;border-radius:16px;background:var(--purple);color:white;display:grid;place-items:center;font-size:25px;box-shadow:0 5px 0 #39349f}
+.brand h1{font-size:19px;margin:0;letter-spacing:-.5px}.brand p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.icon-btn{border:1px solid var(--line);background:white;border-radius:14px;padding:10px 12px;color:var(--ink);font-weight:800}
+.hero{background:linear-gradient(135deg,#6861e9,#8378f4);border-radius:26px;color:#fff;padding:22px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero:after{content:"✦";position:absolute;right:22px;top:8px;font-size:74px;opacity:.2;transform:rotate(12deg)}
+.hero .eyebrow{font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;opacity:.9}.hero h2{font-size:27px;line-height:1.12;margin:8px 0}.hero p{margin:0;max-width:430px;font-size:14px;opacity:.95}.hero-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.hero-emoji{font-size:62px;filter:drop-shadow(0 5px 0 #4339a355)}
+.progress-line{margin-top:18px;background:#ffffff4d;height:8px;border-radius:20px;overflow:hidden}.progress-line span{display:block;height:100%;background:#ffe58d;width:0%;border-radius:20px;transition:width .25s}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 2px 12px}.section-head h3{margin:0;font-size:19px}.section-head span{font-size:12px;color:var(--muted)}
+.skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.skill{border:0;text-align:left;border-radius:22px;padding:17px 15px;min-height:150px;box-shadow:var(--shadow);color:var(--ink);position:relative;overflow:hidden}
+.skill .emoji{font-size:32px;display:block;margin-bottom:8px}.skill strong{display:block;font-size:17px}.skill small{display:block;color:#5f5f7c;margin-top:4px;font-size:12px}.skill .go{position:absolute;right:14px;bottom:13px;background:#ffffffb8;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:900}
+.math{background:var(--yellow)}.english{background:var(--mint)}.logic{background:var(--blue)}.speak{background:var(--pink)}
+.quickrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.quick{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;text-align:left;color:var(--ink);font-weight:800;box-shadow:var(--shadow)}.quick span{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:4px}
+.view{display:none}.view.active{display:block}.back{border:0;background:transparent;padding:14px 0;color:var(--purple);font-weight:900}
+.panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow)}
+.lesson-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.pill{background:#f0efff;color:var(--purple);border-radius:30px;padding:6px 10px;font-size:12px;font-weight:900}
+h2{letter-spacing:-.5px}.question{font-size:22px;font-weight:850;line-height:1.3;margin:8px 0 18px}.hint{font-size:14px;color:var(--muted);margin-top:-7px;margin-bottom:16px}
+.answer-input{width:100%;border:2px solid var(--line);border-radius:15px;padding:14px;font-size:18px;outline:none;background:#fcfcff}.answer-input:focus{border-color:var(--purple)}
+.primary{border:0;background:var(--purple);color:#fff;font-weight:900;padding:14px 18px;border-radius:15px;box-shadow:0 4px 0 #39349f;width:100%;margin-top:12px}.secondary{border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:800;padding:12px 14px;border-radius:14px}
+.feedback{margin-top:14px;border-radius:15px;padding:13px;font-size:14px;display:none}.feedback.show{display:block}.feedback.good{background:#e1f8eb;color:#155c39}.feedback.try{background:#fff2cb;color:#775500}
+.choice-list{display:grid;gap:9px}.choice{padding:13px;border:2px solid var(--line);border-radius:14px;background:#fff;text-align:left;font-weight:700}.choice:active{transform:scale(.99)}.choice.selected{border-color:var(--purple);background:#f3f2ff}
+.prompt-card{background:#f6f5ff;border-radius:18px;padding:18px;margin:12px 0}.prompt-card .big{font-size:36px}.prompt-card p{margin:5px 0}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}.btn-row>*{flex:1}
+.stars{font-size:24px;letter-spacing:4px;color:#e5a900}.tiny{font-size:12px;color:var(--muted)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#f7f7ff;border-radius:16px;padding:13px;text-align:center}.stat b{font-size:23px;display:block}.stat span{font-size:11px;color:var(--muted)}
+.log-item{border-bottom:1px solid var(--line);padding:12px 0}.log-item:last-child{border:0}.log-item strong{display:block}.log-item small{color:var(--muted)}
+textarea{width:100%;min-height:88px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:28px 8px 8px}
+@media(min-width:620px){.app{padding-left:24px;padding-right:24px}.skill{min-height:165px}.hero{padding:28px}.hero h2{font-size:32px}}
+@media(max-width:360px){.app{padding-left:11px;padding-right:11px}.hero{padding:18px}.hero h2{font-size:23px}.skill{padding:13px;min-height:142px}.skill strong{font-size:15px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">🧠</div><div><h1>Brain Power Coach</h1><p>Little steps. Big brain power!</p></div></div>
+  <button class="icon-btn" id="parentBtn" aria-label="Parent dashboard">👨‍👩‍👦</button>
+</header>
+
+<main>
+<section id="homeView" class="view active">
+  <div class="hero">
+    <div class="hero-row"><div><div class="eyebrow">Your learning adventure</div><h2>Ready to level up?</h2><p>Choose a mission, try your best, and collect stars. Mistakes help your brain grow!</p></div><div class="hero-emoji">🚀</div></div>
+    <div class="progress-line"><span id="dailyBar"></span></div>
+    <p id="dailyText" style="margin-top:8px;font-size:12px">0 of 4 missions explored today</p>
+  </div>
+  <div class="section-head"><h3>Choose your mission</h3><span>Tap to begin ✨</span></div>
+  <div class="skills">
+    <button class="skill math" data-module="math"><span class="emoji">🔢</span><strong>Mental Maths</strong><small>Numbers, tricks & money</small><span class="go">→</span></button>
+    <button class="skill english" data-module="english"><span class="emoji">💬</span><strong>English Buddy</strong><small>Chat, describe & learn words</small><span class="go">→</span></button>
+    <button class="skill logic" data-module="logic"><span class="emoji">🕵️</span><strong>Logic Detective</strong><small>Patterns, clues & riddles</small><span class="go">→</span></button>
+    <button class="skill speak" data-module="speak"><span class="emoji">🎤</span><strong>Speaker Star</strong><small>Stories & mini speeches</small><span class="go">→</span></button>
+  </div>
+  <div class="quickrow">
+    <button class="quick" id="todayBtn">🌟 Today's challenge<span>One activity from every skill</span></button>
+    <button class="quick" id="progressBtn">🏆 My progress<span>Stars and practice history</span></button>
+  </div>
+</section>
+
+<section id="lessonView" class="view">
+  <button class="back" id="lessonBack">← Back to missions</button>
+  <div class="panel">
+    <div class="lesson-top"><span class="pill" id="lessonPill">MISSION</span><span class="stars" id="lessonStars">☆ ☆ ☆</span></div>
+    <h2 id="lessonTitle">Let's practise!</h2>
+    <div id="lessonContent"></div>
+    <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+    <div id="lessonActions"></div>
+  </div>
+</section>
+
+<section id="parentView" class="view">
+  <button class="back" id="parentBack">← Back home</button>
+  <div class="panel">
+    <div class="lesson-top"><span class="pill">PARENT CORNER</span><span>🔒 Parent-supervised</span></div>
+    <h2>Learning report</h2>
+    <p class="tiny">Progress is stored on this device only. It is not sent to a server.</p>
+    <div class="stat-grid">
+      <div class="stat"><b id="totalStars">0</b><span>Stars earned</span></div>
+      <div class="stat"><b id="sessionsCount">0</b><span>Activities tried</span></div>
+      <div class="stat"><b id="daysCount">0</b><span>Practice days</span></div>
+    </div>
+    <div class="section-head"><h3>Skill practice</h3></div>
+    <div id="skillStats"></div>
+    <div class="section-head"><h3>Parent notes</h3></div>
+    <textarea id="parentNotes" placeholder="What went well? What would you like to practise next?"></textarea>
+    <button class="primary" id="saveNotes">Save parent notes</button>
+    <div class="section-head"><h3>Recent activities</h3></div>
+    <div id="historyList"></div>
+    <button class="secondary" id="exportBtn" style="width:100%;margin-top:14px">Download progress report</button>
+    <button class="secondary" id="resetBtn" style="width:100%;margin-top:10px;color:#b42318">Reset all progress</button>
+  </div>
+</section>
+
+<section id="progressView" class="view">
+  <button class="back" id="progressBack">← Back home</button>
+  <div class="panel">
+    <div class="lesson-top"><span class="pill">MY PROGRESS</span><span>🏆</span></div>
+    <h2>Look how far you've come!</h2>
+    <div class="stat-grid">
+      <div class="stat"><b id="kidStars">0</b><span>Stars</span></div>
+      <div class="stat"><b id="kidActivities">0</b><span>Activities</span></div>
+      <div class="stat"><b id="kidDays">0</b><span>Days practised</span></div>
+    </div>
+    <div class="prompt-card"><div class="big">🌱</div><strong>Growing brain reminder</strong><p>Every time you try, your brain gets a chance to grow. You don't have to be perfect!</p></div>
+    <div id="kidSkillStats"></div>
+  </div>
+</section>
+</main>
+<footer>Made for curious minds • Take breaks, have fun, ask a grown-up for help.</footer>
+</div>
+
+<script>
+const MODULES = {
+ math:{name:"Mental Maths",emoji:"🔢",pill:"NUMBER NINJA",questions:[
+  {q:"What is 36 + 27?",a:["63","sixty three"],hint:"Add 30, then take away 3.",why:"36 + 30 = 66, and 66 − 3 = 63."},
+  {q:"What is 100 − 48?",a:["52"],hint:"Take away 50, then add 2 back.",why:"100 − 50 = 50, then add 2 = 52."},
+  {q:"What is 7 × 8?",a:["56"],hint:"Think of 7 × 4, then double it.",why:"7 × 8 = 56."},
+  {q:"What is 96 ÷ 8?",a:["12","twelve"],hint:"What number times 8 makes 96?",why:"8 × 12 = 96, so 96 ÷ 8 = 12."},
+  {q:"What is 25 × 4?",a:["100","one hundred"],hint:"Think of four quarters of 100.",why:"25 + 25 + 25 + 25 = 100."},
+  {q:"What is 145 + 99?",a:["244"],hint:"Add 100, then take away 1.",why:"145 + 100 − 1 = 244."},
+  {q:"A toy costs ₹35. What do 3 toys cost?",a:["105","105 rupees","rs 105","₹105"],hint:"Add 35 three times, or calculate 35 × 3.",why:"₹35 × 3 = ₹105."},
+  {q:"It is 3:20 p.m. What time is it 45 minutes later?",a:["4:05","4:05 pm","4:05 p.m.","4.05"],hint:"First add 40 minutes, then 5 more.",why:"3:20 + 40 minutes = 4:00, plus 5 = 4:05."}
+ ]},
+ logic:{name:"Logic Detective",emoji:"🕵️",pill:"CLUE FINDER",questions:[
+  {q:"What comes next? 3, 6, 12, 24, __",choices:["30","36","48","42"],correct:2,hint:"Look at what happens to each number.",why:"Each number doubles. 24 × 2 = 48."},
+  {q:"Which is the odd one out?",choices:["Apple","Banana","Carrot","Mango"],correct:2,hint:"Think about which one is usually a vegetable.",why:"Carrot is usually classed as a vegetable; the others are fruits."},
+  {q:"Ravi is taller than Sam. Sam is taller than Ben. Who is shortest?",choices:["Ravi","Sam","Ben","Cannot tell"],correct:2,hint:"Put them in order from tallest to shortest.",why:"Ravi is taller than Sam, and Sam is taller than Ben. Ben is shortest."},
+  {q:"All zips are toys. Some toys are red. Must all zips be red?",choices:["Yes","No","Only at night","We know all toys are red"],correct:1,hint:"Do we know the colour of every zip?",why:"No. The clues don't tell us the colour of zips."},
+  {q:"Three chickens each lay one egg every day. How many eggs in four days?",choices:["4","7","12","16"],correct:2,hint:"How many eggs in one day? Then multiply by four.",why:"3 eggs per day × 4 days = 12 eggs."},
+  {q:"A shape has 3 sides and 3 corners. What is it?",choices:["Circle","Triangle","Square","Rectangle"],correct:1,hint:"Think of a road sign shaped like a pointy shape.",why:"A triangle has three sides and three corners."}
+ ]},
+ english:{name:"English Buddy",emoji:"💬",pill:"WORD WIZARD",questions:[
+  {prompt:"Tell me three things you did today.",tip:"Try starting with: “Today, I…”"},
+  {prompt:"Describe your favourite game and explain how to play it.",tip:"Tell me what you need, what you do, and why you like it."},
+  {prompt:"If you could visit any country, where would you go and why?",tip:"Try using “I would like to… because…”"},
+  {prompt:"Describe an animal without saying its name. Can someone guess it?",tip:"Talk about its appearance, movement and habitat."},
+  {prompt:"What is something new you learned recently?",tip:"Explain what you learned and why it was interesting."},
+  {prompt:"Invent a new ice-cream flavour. What is in it?",tip:"Use describing words such as creamy, crunchy, sweet or unusual."}
+ ]},
+ speak:{name:"Speaker Star",emoji:"🎤",pill:"CONFIDENT VOICE",questions:[
+  {prompt:"Give a 30-second introduction about yourself. Share your favourite hobby and one thing you want to learn.",tip:"Start with “Hello, today I want to tell you…” and finish with “Thank you for listening.”",seconds:30},
+  {prompt:"Speak for one minute about your favourite book, film or cartoon.",tip:"Say what it is about, who your favourite character is, and why you recommend it.",seconds:60},
+  {prompt:"If you could invent something to help children, what would you invent?",tip:"Explain what it does, who it helps and why it is useful.",seconds:60},
+  {prompt:"Should children help with small jobs at home? Give your opinion and two reasons.",tip:"Start with your opinion, give two reasons, then finish with a conclusion.",seconds:60},
+  {prompt:"Tell a story that begins: “One morning, I found a tiny door…”",tip:"Include a beginning, a problem, and an ending.",seconds:60},
+  {prompt:"Give a two-minute presentation about something you are curious about.",tip:"Choose two or three main ideas. Practise speaking slowly and clearly.",seconds:120}
+ ]}
+};
+const STORAGE_KEY="brainPowerCoach.v1";
+let state=loadState(), currentModule=null, currentQuestion=null, questionIndex=0, currentRunStars=0, currentRunCorrect=0, speechTimer=null, speechLeft=0;
+function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{stars:0,history:[],notes:"",daily:{date:"",modules:[]}}}catch(e){return {stars:0,history:[],notes:"",daily:{date:"",modules:[]}}}}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderHome()}
+function today(){return new Date().toLocaleDateString("en-CA")}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function show(id){document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"})}
+function renderHome(){if(state.daily.date!==today())state.daily={date:today(),modules:[]};document.getElementById("dailyText").textContent=state.daily.modules.length+" of 4 missions explored today";document.getElementById("dailyBar").style.width=(state.daily.modules.length/4*100)+"%"}
+function startModule(key){currentModule=key;questionIndex=0;currentRunStars=0;currentRunCorrect=0;show("lessonView");renderQuestion()}
+function renderQuestion(){
+ clearInterval(speechTimer);const m=MODULES[currentModule];currentQuestion=m.questions[questionIndex % m.questions.length];
+ document.getElementById("lessonPill").textContent=m.pill;document.getElementById("lessonTitle").textContent=m.name;document.getElementById("lessonStars").textContent="⭐ "+currentRunStars;
+ const content=document.getElementById("lessonContent"),actions=document.getElementById("lessonActions"),fb=document.getElementById("feedback");fb.className="feedback";fb.textContent="";actions.innerHTML="";
+ if(currentModule==="math"){
+  content.innerHTML=`<div class="prompt-card"><div class="big">🧠</div><p class="tiny">QUESTION ${questionIndex+1}</p><div class="question">${esc(currentQuestion.q)}</div><p class="tiny">Try to solve it in your head first!</p></div><input class="answer-input" id="answerInput" inputmode="decimal" autocomplete="off" placeholder="Type your answer" aria-label="Your answer"><button class="primary" id="checkBtn">Check my answer ✨</button><button class="secondary" id="hintBtn" style="width:100%;margin-top:10px">Give me a hint 💡</button>`;
+  document.getElementById("checkBtn").onclick=checkMath;document.getElementById("answerInput").addEventListener("keydown",e=>{if(e.key==="Enter")checkMath()});document.getElementById("hintBtn").onclick=()=>showFeedback("💡 Hint: "+currentQuestion.hint,"try");
+ }else if(currentModule==="logic"){
+  content.innerHTML=`<div class="prompt-card"><div class="big">🔎</div><p class="tiny">PUZZLE ${questionIndex+1}</p><div class="question">${esc(currentQuestion.q)}</div></div><div class="choice-list">${currentQuestion.choices.map((c,i)=>`<button class="choice" data-choice="${i}">${String.fromCharCode(65+i)}. ${esc(c)}</button>`).join("")}</div><button class="secondary" id="hintBtn" style="width:100%;margin-top:10px">Give me a hint 💡</button>`;
+  content.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>checkChoice(Number(b.dataset.choice)));document.getElementById("hintBtn").onclick=()=>showFeedback("💡 Hint: "+currentQuestion.hint,"try");
+ }else{
+  content.innerHTML=`<div class="prompt-card"><div class="big">${currentModule==="speak"?"🎤":"💬"}</div><p class="tiny">${currentModule==="speak"?"SPEAKING CHALLENGE":"CONVERSATION CHALLENGE"} ${questionIndex+1}</p><div class="question">${esc(currentQuestion.prompt)}</div><p>${esc(currentQuestion.tip)}</p></div><div class="btn-row"><button class="secondary" id="readBtn">🔊 Read it aloud</button><button class="secondary" id="timerBtn">${currentModule==="speak"?"▶ Start timer":"🎯 I tried it!"}</button></div><p class="tiny" id="timerText" style="margin-top:12px">${currentModule==="speak"?"Speak out loud, not just in your head. Ask a grown-up to listen.":"Answer aloud in full sentences. Try adding details and reasons."}</p><button class="primary" id="doneBtn">I finished! ⭐</button><button class="secondary" id="tipBtn" style="width:100%;margin-top:10px">Show me a sentence starter</button>`;
+  document.getElementById("readBtn").onclick=()=>speak(currentQuestion.prompt);document.getElementById("doneBtn").onclick=finishOpenEnded;document.getElementById("tipBtn").onclick=()=>showFeedback("Try this: "+currentQuestion.tip,"try");
+  if(currentModule==="speak")document.getElementById("timerBtn").onclick=startTimer;else document.getElementById("timerBtn").onclick=()=>showFeedback("Lovely! Try to speak in complete sentences and add one reason or example.","good");
+ }
+}
+function normalise(s){return String(s).toLowerCase().replace(/[₹,.\s]/g,"").replace(/rupees|rupee|rs/g,"")}
+function checkMath(){const input=document.getElementById("answerInput");if(!input)return;const val=normalise(input.value);if(!val){input.focus();return}const ok=currentQuestion.a.some(a=>normalise(a)===val);if(ok){currentRunStars++;currentRunCorrect++;showFeedback("🎉 Correct! "+currentQuestion.why,"good");document.getElementById("lessonStars").textContent="⭐ "+currentRunStars;advanceButton()}else{showFeedback("Good try! 💛 "+currentQuestion.hint+" Try once more, or ask a grown-up to help.","try");input.select()}}
+function checkChoice(i){if(i===currentQuestion.correct){currentRunStars++;currentRunCorrect++;showFeedback("🎉 Great thinking! "+currentQuestion.why,"good");document.getElementById("lessonStars").textContent="⭐ "+currentRunStars;document.querySelectorAll("[data-choice]").forEach(b=>b.disabled=true);advanceButton()}else{showFeedback("Not quite — detectives keep looking! 💡 "+currentQuestion.hint,"try")}}
+function showFeedback(msg,type){const f=document.getElementById("feedback");f.textContent=msg;f.className="feedback show "+type}
+function advanceButton(){const actions=document.getElementById("lessonActions");actions.innerHTML='<button class="primary" id="nextBtn">Next question →</button>';document.getElementById("nextBtn").onclick=()=>{questionIndex++;if(questionIndex>=5)completeModule();else renderQuestion()}}
+function finishOpenEnded(){currentRunStars++;document.getElementById("lessonStars").textContent="⭐ "+currentRunStars;showFeedback("🌟 Well done for practising! Ask a grown-up to share one thing you did well and one thing to try next time.","good");document.getElementById("lessonActions").innerHTML='<button class="primary" id="openNext">Next challenge →</button>';document.getElementById("openNext").onclick=()=>{questionIndex++;if(questionIndex>=3)completeModule();else renderQuestion()}}
+function completeModule(){
+ clearInterval(speechTimer);const m=MODULES[currentModule];state.stars+=currentRunStars;state.history.unshift({date:today(),key:currentModule,name:m.name,stars:currentRunStars,correct:currentRunCorrect,questions:currentModule==="math"||currentModule==="logic"?Math.min(questionIndex+1,5):0});state.history=state.history.slice(0,100);if(state.daily.date!==today())state.daily={date:today(),modules:[]};if(!state.daily.modules.includes(currentModule))state.daily.modules.push(currentModule);saveState();
+ document.getElementById("lessonPill").textContent="MISSION COMPLETE";document.getElementById("lessonTitle").textContent="You did it! 🎉";document.getElementById("lessonContent").innerHTML=`<div class="prompt-card" style="text-align:center"><div class="big">🏆</div><h2>${currentRunStars} star${currentRunStars===1?"":"s"} earned!</h2><p>You practised ${esc(m.name)}. Every try helps your brain grow.</p><div class="stars">${"⭐".repeat(Math.min(currentRunStars,5))||"✨"}</div></div>`;document.getElementById("feedback").className="feedback";document.getElementById("lessonActions").innerHTML='<button class="primary" id="againBtn">Practise again</button><button class="secondary" id="homeAgain" style="width:100%;margin-top:10px">Back to missions</button>';document.getElementById("againBtn").onclick=()=>startModule(currentModule);document.getElementById("homeAgain").onclick=()=>show("homeView")
+}
+function speak(text){if(!("speechSynthesis" in window)){showFeedback("Read this aloud together with a grown-up.","try");return}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-IN";u.rate=.88;window.speechSynthesis.speak(u)}
+function startTimer(){clearInterval(speechTimer);speechLeft=currentQuestion.seconds||60;const el=document.getElementById("timerText");const btn=document.getElementById("timerBtn");btn.textContent="⏸ Timer running";el.textContent="Time to speak: "+speechLeft+" seconds. Take a breath and begin!";speechTimer=setInterval(()=>{speechLeft--;if(el)el.textContent=speechLeft>0?"Time to speak: "+speechLeft+" seconds. Keep going!":"Time! Great effort — finish your last sentence.";if(speechLeft<=0){clearInterval(speechTimer);btn.textContent="↻ Start again"}},1000)}
+function statsMarkup(){const keys=Object.keys(MODULES);return keys.map(k=>{const arr=state.history.filter(h=>h.key===k);const stars=arr.reduce((n,h)=>n+h.stars,0);return `<div class="log-item"><strong>${MODULES[k].emoji} ${MODULES[k].name}</strong><small>${arr.length} activities · ${stars} stars earned</small></div>`}).join("")}
+function renderParent(){document.getElementById("totalStars").textContent=state.stars;document.getElementById("sessionsCount").textContent=state.history.length;document.getElementById("daysCount").textContent=new Set(state.history.map(h=>h.date)).size;document.getElementById("skillStats").innerHTML=statsMarkup();document.getElementById("historyList").innerHTML=state.history.slice(0,8).map(h=>`<div class="log-item"><strong>${MODULES[h.key]?.emoji||"⭐"} ${esc(h.name)}</strong><small>${esc(h.date)} · ${h.stars} stars${h.questions?` · ${h.correct}/${h.questions} correct`:""}</small></div>`).join("")||'<p class="tiny">No activities yet. Complete a mission to see progress here.</p>';document.getElementById("parentNotes").value=state.notes||""}
+function renderKidProgress(){document.getElementById("kidStars").textContent=state.stars;document.getElementById("kidActivities").textContent=state.history.length;document.getElementById("kidDays").textContent=new Set(state.history.map(h=>h.date)).size;document.getElementById("kidSkillStats").innerHTML=statsMarkup()}
+document.querySelectorAll("[data-module]").forEach(b=>b.onclick=()=>startModule(b.dataset.module));
+document.getElementById("parentBtn").onclick=()=>{renderParent();show("parentView")};
+document.getElementById("parentBack").onclick=()=>show("homeView");document.getElementById("lessonBack").onclick=()=>{clearInterval(speechTimer);show("homeView")};
+document.getElementById("progressBtn").onclick=()=>{renderKidProgress();show("progressView")};document.getElementById("progressBack").onclick=()=>show("homeView");
+document.getElementById("todayBtn").onclick=()=>{const done=state.daily.modules||[];const next=["math","english","logic","speak"].find(k=>!done.includes(k));startModule(next||"math")};
+document.getElementById("saveNotes").onclick=()=>{state.notes=document.getElementById("parentNotes").value;saveState();alert("Parent notes saved on this device.")};
+document.getElementById("exportBtn").onclick=()=>{const report={app:"Brain Power Coach",exportedAt:new Date().toISOString(),stars:state.stars,history:state.history,parentNotes:state.notes};const blob=new Blob([JSON.stringify(report,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="brain-power-progress.json";a.click();URL.revokeObjectURL(a.href)};
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset all stars, history and parent notes on this device? This cannot be undone.")){localStorage.removeItem(STORAGE_KEY);state=loadState();renderParent();renderHome()}};
+renderHome();
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
